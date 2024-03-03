@@ -26,6 +26,12 @@
     },
     "tools": {
       "description": "Install MyGUI tools."
+    },
+    "plugins": {
+      "description": "Build MyGUI plugins."
+    },
+    "obsolete": {
+      "description": "Keep obsolete functions."
     }
   }
 }
