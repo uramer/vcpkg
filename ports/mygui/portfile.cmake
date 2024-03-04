@@ -1,7 +1,3 @@
-# MyGUI supports compiling itself as a DLL,
-# but it seems platform-related stuff doesn't support dynamic linkage
-vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
-
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO MyGUI/mygui
@@ -13,6 +9,7 @@ vcpkg_from_github(
         Install-tools.patch
         opengl.patch
         sdl2-static.patch
+        platform-lib-static.patch
 )
 
 if(VCPKG_TARGET_ARCHITECTURE STREQUAL "wasm32")
@@ -33,10 +30,12 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
         plugins MYGUI_DISABLE_PLUGINS
 )
 
+string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static" MYGUI_STATIC)
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        -DMYGUI_STATIC=TRUE
+        -DMYGUI_STATIC=${MYGUI_STATIC}
         -DMYGUI_BUILD_DEMOS=FALSE
         -DMYGUI_BUILD_UNITTESTS=FALSE
         -DMYGUI_BUILD_TEST_APP=FALSE
